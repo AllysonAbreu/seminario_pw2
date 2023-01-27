@@ -1,22 +1,26 @@
-name: Deploy in Render
+
+name: Deploy Vercel
+
+env:
+  VERCEL_ACCESS_TOKEN: ${{ secrets.VERCEL_ACCESS_TOKEN }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 on:
-  push:
-    branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
+    types: [opened, synchronize, closed]
+    branches:
+      - main
 
-jobs:    
+jobs:
   deploy:
-    name: Wait for Deploy
+    if: ${{ github.event.action == 'opened' || github.event.action == 'synchronize' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for Render Deployment
-        uses: bounceapp/render-action@0.6.0
+      - uses: snaplet/vercel-action@v2
+  delete:
+    if: ${{ github.event.action == 'closed' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snaplet/vercel-action@v2
         with:
-          render-token: ${{ secrets.RENDER_TOKEN }}
-          github-token: ${{ secrets.TOKEN_GITHUB }}
-          service-id: ${{ secrets.SERVER_ID }}
-          retries: 20
-          wait: 16000
-          sleep: 30000
+          delete: true
