@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -36,7 +36,7 @@ jobs:
         with:
           render-token: ${{ secrets.RENDER_TOKEN }}
           github-token: ${{ secrets.TOKEN_GITHUB }}
-          service-id: srv-01
+          service-id: deployTest
           retries: 20
           wait: 16000
           sleep: 30000
