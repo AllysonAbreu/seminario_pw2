@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: snaplet/vercel-action@v2
-#   delete:
-#     if: ${{ github.event.action == 'closed' }}
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: snaplet/vercel-action@v2
-#         with:
-#           delete: true
+  delete:
+    if: ${{ github.event.action == 'closed' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snaplet/vercel-action@v2
+        with:
+          delete: true
