@@ -1,0 +1,45 @@
+name: NodeJS with Webpack
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        npm install
+        npx webpack
+        
+  name: Render
+  on: [pull_request]:
+  jobs:
+    deploy:
+      name: Wait for Deploy
+      runs-on: ubuntu-latest
+      steps:
+        - name: Wait for Render Deployment
+          uses: bounceapp/render-action@0.6.0
+          with:
+            render-token: ${{ secrets.RENDER_TOKEN }}
+            github-token: ${{ secrets.TOKEN_GITHUB }}
+            service-id: srv-01
+            retries: 20
+            wait: 16000
+            sleep: 30000
